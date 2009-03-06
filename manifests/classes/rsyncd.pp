@@ -17,7 +17,6 @@ class rsyncd {
     Debian: {
       augeas { "enable rsync service":
         changes => "set /files/etc/default/rsync/RSYNC_ENABLE true",
-        onlyif => "get /files/etc/default/rsync/RSYNC_ENABLE != true",
         notify => Service["rsync"],
         require => Package["rsync"],
       }
@@ -31,7 +30,6 @@ class rsyncd {
     RedHat: {
       augeas { "enable rsync service":
         changes => "set /files/etc/xinetd.d/rsync/rsync/disable no",
-        onlyif => "get /files/etc/xinetd.d/rsync/rsync/disable != no",
         notify => Service["xinetd"],
         require => Package["xinetd"],
       }
