@@ -1,9 +1,10 @@
 
-module rsyncreadonlywwwdata 1.1;
+module rsyncreadonlywwwdata 1.2;
 
 require {
         type httpd_sys_content_t;
-  type httpd_config_t;
+        type httpd_config_t;
+        type httpd_sys_script_exec_t;
         type rsync_t;
         class file { read getattr };
         class lnk_file { read getattr };
@@ -17,4 +18,7 @@ allow rsync_t httpd_sys_content_t:dir { search read getattr };
 allow rsync_t httpd_config_t:file { read getattr };
 allow rsync_t httpd_config_t:lnk_file { read getattr };
 allow rsync_t httpd_config_t:dir { search read getattr };
+allow rsync_t httpd_sys_script_exec_t:file { read getattr };
+allow rsync_t httpd_sys_script_exec_t:lnk_file { read getattr };
+allow rsync_t httpd_sys_script_exec_t:dir { search read getattr };
 
