@@ -1,3 +1,4 @@
+# file managed by puppet
 
 module rsyncreadonlywwwdata 1.2;
 
