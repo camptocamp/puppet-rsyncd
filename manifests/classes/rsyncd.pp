@@ -29,7 +29,15 @@ class rsyncd {
 
     RedHat: {
       augeas { "enable rsync service":
-        changes => "set /files/etc/xinetd.d/rsync/rsync/disable no",
+        context => "/files/etc/xinetd.d/rsync/rsync/",
+        changes => [
+          "set disable no",
+          "set socket_type stream",
+          "set wait no",
+          "set user root",
+          "set server /usr/bin/rsync",
+          "set server_args/value --daemon",
+        ],
         notify => Service["xinetd"],
         require => Package["xinetd"],
       }
