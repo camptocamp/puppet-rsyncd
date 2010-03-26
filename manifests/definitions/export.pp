@@ -10,8 +10,8 @@ define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $path=unde
           changes => [
             "set '$ctx/$name/#comment' 'created by rsyncd::export($name)'",
             "set '$ctx/$name/path' '$path'",
-            "set '$ctx/$name/use\ chroot' $chroot",
-            "set '$ctx/$name/read\ only' $readonly",
+            "set '$ctx/$name/use\\ chroot' $chroot",
+            "set '$ctx/$name/read\\ only' $readonly",
           ],
           require => Augeas["set rsyncd pidfile"],
         }
@@ -32,28 +32,28 @@ define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $path=unde
 
         if $users {
           augeas { "set rsyncd auth users for $name":
-            changes => "set '$ctx/$name/auth\ users' '$users'",
+            changes => "set '$ctx/$name/auth\\ users' '$users'",
             require => Augeas["setup rsyncd export $name"],
           }
         }
 
         if $secrets {
           augeas { "set rsyncd secrets file for $name":
-            changes => "set '$ctx/$name/secrets\ file' '$secrets'",
+            changes => "set '$ctx/$name/secrets\\ file' '$secrets'",
             require => Augeas["setup rsyncd export $name"],
           }
         }
 
         if $allow {
           augeas { "set rsyncd hosts allow for $name":
-            changes => "set '$ctx/$name/hosts\ allow' '$allow'",
+            changes => "set '$ctx/$name/hosts\\ allow' '$allow'",
             require => Augeas["setup rsyncd export $name"],
           }
         }
 
         if $deny {
           augeas { "set rsyncd hosts deny for $name":
-            changes => "set '$ctx/$name/hosts\ deny' '$deny'",
+            changes => "set '$ctx/$name/hosts\\ deny' '$deny'",
             require => Augeas["setup rsyncd export $name"],
           }
         }

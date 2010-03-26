@@ -8,7 +8,7 @@ class rsyncd {
 
   augeas { "set rsyncd pidfile":
     context => "/files/etc/rsyncd.conf/.anon/",
-    changes => "set 'pid\ file' /var/run/rsyncd.pid",
+    changes => "set 'pid\\ file' /var/run/rsyncd.pid",
     require => File["/etc/rsyncd.conf"],
   }
 
