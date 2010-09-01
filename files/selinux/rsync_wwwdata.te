@@ -1,0 +1,25 @@
+# file managed by puppet
+
+module rsync_wwwdata 1.0;
+
+require {
+        type httpd_sys_content_t;
+        type httpd_config_t;
+        type httpd_sys_script_exec_t;
+        type rsync_t;
+        class file     { read write getattr setattr create rename link unlink };
+        class lnk_file { read write getattr setattr create rename link unlink };
+        class dir      { read write getattr setattr create rename link unlink add_name remove_name search  };
+}
+
+#============= rsync_t ==============
+allow rsync_t httpd_sys_content_t:file         { read write getattr setattr create rename link unlink };
+allow rsync_t httpd_sys_content_t:lnk_file     { read write getattr setattr create rename link unlink };
+allow rsync_t httpd_sys_content_t:dir          { read write getattr setattr create rename link unlink add_name remove_name search  };
+allow rsync_t httpd_config_t:file              { read write getattr };
+allow rsync_t httpd_config_t:lnk_file          { read write getattr };
+allow rsync_t httpd_config_t:dir               { read write getattr search };
+allow rsync_t httpd_sys_script_exec_t:file     { read write getattr };
+allow rsync_t httpd_sys_script_exec_t:lnk_file { read write getattr };
+allow rsync_t httpd_sys_script_exec_t:dir      { read write getattr search };
+
