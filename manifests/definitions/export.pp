@@ -1,4 +1,4 @@
-define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $path=undef, $uid=undef, $gid=undef, $users=undef, $secrets=undef, $allow=undef, $deny=undef) {
+define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $mungesymlinks=true, $path=undef, $uid=undef, $gid=undef, $users=undef, $secrets=undef, $allow=undef, $deny=undef) {
 
   $ctx = "/files/etc/rsyncd.conf"
 
@@ -14,6 +14,23 @@ define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $path=unde
             "set '$ctx/$name/read\\ only' $readonly",
           ],
           require => Augeas["set rsyncd pidfile"],
+        }
+
+        case $operatingsystem {
+
+          /RedHat|CentOS/: {
+            case $lsbmajdistrelease {
+
+              "4","5": { }
+
+              default: {
+                augeas { "setup rsyncd munge symlinks $name":
+                  changes => "set '$ctx/$name/munge\\ symlinks' $mungesymlinks",
+                  require => Augeas["setup rsyncd export $name"],
+                }
+              }
+            }
+          }
         }
 
         if $uid {
