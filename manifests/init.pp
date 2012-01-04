@@ -2,6 +2,8 @@ class rsyncd {
 
   realize(Package["rsync"])
 
+  include rsyncd::params
+
   file { "/etc/rsyncd.conf":
     ensure => present,
   }
@@ -29,7 +31,7 @@ class rsyncd {
 
     RedHat: {
       augeas { "enable rsync service":
-        context => "/files/etc/xinetd.d/rsync/rsync/",
+        context => $xinetdcontext,
         changes => [
           "set disable no",
           "set socket_type stream",
