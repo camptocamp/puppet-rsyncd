@@ -8,6 +8,7 @@ class rsyncd::params {
       },
       default => '/files/etc/xinetd.d/rsync/rsync/',
     },
+    'Debian' => '',
   }
 
 }
