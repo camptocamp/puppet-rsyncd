@@ -9,8 +9,9 @@ class rsyncd {
   }
 
   augeas { "set rsyncd pidfile":
-    context => "/files/etc/rsyncd.conf/.anon/",
-    changes => "set 'pid\\ file' /var/run/rsyncd.pid",
+    incl    => "/etc/rsyncd.conf",
+    lens    => 'Rsyncd.lns',
+    changes => "set '/.anon/pid\\ file' /var/run/rsyncd.pid",
     require => File["/etc/rsyncd.conf"],
   }
 
@@ -18,8 +19,10 @@ class rsyncd {
 
     Debian: {
       augeas { "enable rsync service":
-        changes => "set /files/etc/default/rsync/RSYNC_ENABLE true",
-        notify => Service["rsync"],
+        changes => "set RSYNC_ENABLE true",
+        lens    => 'Shellvars.lns',
+        incl    => '/etc/default/rsync',
+        notify  => Service["rsync"],
         require => Package["rsync"],
       }
       service { "rsync":
@@ -30,15 +33,19 @@ class rsyncd {
     }
 
     RedHat: {
+
+      $prefix = $rsyncd::params::xinetdcontext
+
       augeas { "enable rsync service":
-        context => $xinetdcontext,
+        incl    => "/etc/xinetd.d/rsync",
+        lens    => 'Xinetd.lns',
         changes => [
-          "set disable no",
-          "set socket_type stream",
-          "set wait no",
-          "set user root",
-          "set server /usr/bin/rsync",
-          "set server_args/value --daemon",
+          "set ${prefix}/disable no",
+          "set ${prefix}/socket_type stream",
+          "set ${prefix}/wait no",
+          "set ${prefix}/user root",
+          "set ${prefix}/server /usr/bin/rsync",
+          "set ${prefix}/server_args/value --daemon",
         ],
         notify => Service["xinetd"],
         require => Package["xinetd"],
