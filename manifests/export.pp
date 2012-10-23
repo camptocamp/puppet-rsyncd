@@ -5,6 +5,10 @@ define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $mungesyml
   case $ensure {
     present: {
 
+      if ! $::rsyncd::params::xinetdcontext {
+        Augeas{ notify => Service['rsync'] }
+      }
+
       if $path {
         augeas { "setup rsyncd export $name":
           changes => [
