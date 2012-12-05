@@ -1,47 +1,56 @@
 class rsyncd {
 
-  realize(Package["rsync"])
+  realize(Package['rsync'])
 
   include rsyncd::params
 
-  file { "/etc/rsyncd.conf":
+  file { '/etc/rsyncd.conf':
     ensure => present,
   }
 
-  augeas { "set rsyncd pidfile":
-    context => "/files/etc/rsyncd.conf/.anon/",
-    changes => "set 'pid\\ file' /var/run/rsyncd.pid",
-    require => File["/etc/rsyncd.conf"],
+  augeas { 'set rsyncd pidfile':
+    incl    => '/etc/rsyncd.conf',
+    lens    => 'Rsyncd.lns',
+    changes => "set '.anon/pid\\ file' /var/run/rsyncd.pid",
+    require => File['/etc/rsyncd.conf'],
   }
 
-  case $operatingsystem {
+  case $::osfamily {
 
     Debian: {
-      augeas { "enable rsync service":
-        changes => "set /files/etc/default/rsync/RSYNC_ENABLE true",
-        notify => Service["rsync"],
-        require => Package["rsync"],
+      augeas { 'enable rsync service':
+        changes => 'set RSYNC_ENABLE true',
+        lens    => 'Shellvars.lns',
+        incl    => '/etc/default/rsync',
+        notify  => Service['rsync'],
+        require => Package['rsync'],
       }
-      service { "rsync":
-        ensure => running,
-        enable => true,
-        require => Package["rsync"],
+      service { 'rsync':
+        ensure     => running,
+        enable     => true,
+        hasstatus  => true,
+        hasrestart => true,
+        require    => Package['rsync'],
       }
     }
 
     RedHat: {
-      augeas { "enable rsync service":
-        context => $xinetdcontext,
+
+      $prefix = $rsyncd::params::xinetdcontext
+
+      augeas { 'enable rsync service':
+        incl    => '/etc/xinetd.d/rsync',
+        lens    => 'Xinetd.lns',
         changes => [
-          "set disable no",
-          "set socket_type stream",
-          "set wait no",
-          "set user root",
-          "set server /usr/bin/rsync",
-          "set server_args/value --daemon",
+          "set ${prefix}/disable no",
+          "set ${prefix}/socket_type stream",
+          "set ${prefix}/wait no",
+          "set ${prefix}/user root",
+          "set ${prefix}/server /usr/bin/rsync",
+          "set ${prefix}/server_args/value --daemon",
         ],
-        notify => Service["xinetd"],
-        require => Package["xinetd"],
+        notify  => Service['xinetd'],
+        require => Package['xinetd'],
       }
     }
 
