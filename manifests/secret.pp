@@ -1,8 +1,11 @@
-define rsyncd::secret($ensure='present', $file='/etc/rsyncd.secrets', $passwd) {
+define rsyncd::secret($passwd, $ensure='present', $file='/etc/rsyncd.secrets') {
+
+  validate_re($ensure, ['^present$', '^absent$'])
+  validate_absolute_path($file)
 
   $change = $ensure ? {
     'present' => "set ${name} '${passwd}'",
-    'absent'  => "rm ${name}"
+    'absent'  => "rm ${name}",
   }
 
   augeas { "rsyncd.secret entry for ${name}":
