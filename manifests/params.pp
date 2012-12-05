@@ -9,6 +9,7 @@ class rsyncd::params {
       default => 'rsync/',
     },
     'Debian' => '',
+    'Ubuntu' => '',
   }
 
 }

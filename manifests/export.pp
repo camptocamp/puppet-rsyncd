@@ -17,6 +17,10 @@ define rsyncd::export (
   case $ensure {
     present: {
 
+      if ! $::rsyncd::params::xinetdcontext {
+        Augeas{ notify => Service['rsync'] }
+      }
+
       if $path {
         augeas { "setup rsyncd export ${name}":
           incl    => $file,
