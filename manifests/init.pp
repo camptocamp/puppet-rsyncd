@@ -1,34 +1,34 @@
 class rsyncd {
 
-  realize(Package["rsync"])
+  realize(Package['rsync'])
 
   include rsyncd::params
 
-  file { "/etc/rsyncd.conf":
+  file { '/etc/rsyncd.conf':
     ensure => present,
   }
 
-  augeas { "set rsyncd pidfile":
+  augeas { 'set rsyncd pidfile':
     incl    => '/etc/rsyncd.conf',
     lens    => 'Rsyncd.lns',
     changes => "set '.anon/pid\\ file' /var/run/rsyncd.pid",
-    require => File["/etc/rsyncd.conf"],
+    require => File['/etc/rsyncd.conf'],
   }
 
-  case $operatingsystem {
+  case $::operatingsystem {
 
     Debian: {
-      augeas { "enable rsync service":
-        changes => "set RSYNC_ENABLE true",
+      augeas { 'enable rsync service':
+        changes => 'set RSYNC_ENABLE true',
         lens    => 'Shellvars.lns',
         incl    => '/etc/default/rsync',
-        notify  => Service["rsync"],
-        require => Package["rsync"],
+        notify  => Service['rsync'],
+        require => Package['rsync'],
       }
-      service { "rsync":
+      service { 'rsync':
         ensure => running,
         enable => true,
-        require => Package["rsync"],
+        require => Package['rsync'],
       }
     }
 
@@ -36,8 +36,8 @@ class rsyncd {
 
       $prefix = $rsyncd::params::xinetdcontext
 
-      augeas { "enable rsync service":
-        incl    => "/etc/xinetd.d/rsync",
+      augeas { 'enable rsync service':
+        incl    => '/etc/xinetd.d/rsync',
         lens    => 'Xinetd.lns',
         changes => [
           "set ${prefix}/disable no",
@@ -47,8 +47,8 @@ class rsyncd {
           "set ${prefix}/server /usr/bin/rsync",
           "set ${prefix}/server_args/value --daemon",
         ],
-        notify => Service["xinetd"],
-        require => Package["xinetd"],
+        notify => Service['xinetd'],
+        require => Package['xinetd'],
       }
     }
 
