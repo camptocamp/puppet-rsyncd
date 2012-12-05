@@ -15,7 +15,7 @@ class rsyncd {
     require => File['/etc/rsyncd.conf'],
   }
 
-  case $::operatingsystem {
+  case $::osfamily {
 
     Debian: {
       augeas { 'enable rsync service':
