@@ -26,9 +26,11 @@ class rsyncd {
         require => Package['rsync'],
       }
       service { 'rsync':
-        ensure => running,
-        enable => true,
-        require => Package['rsync'],
+        ensure     => running,
+        enable     => true,
+        hasstatus  => true,
+        hasrestart => true,
+        require    => Package['rsync'],
       }
     }
 
@@ -47,7 +49,7 @@ class rsyncd {
           "set ${prefix}/server /usr/bin/rsync",
           "set ${prefix}/server_args/value --daemon",
         ],
-        notify => Service['xinetd'],
+        notify  => Service['xinetd'],
         require => Package['xinetd'],
       }
     }
