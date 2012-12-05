@@ -1,6 +1,6 @@
 define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $mungesymlinks=true, $path=undef, $uid=undef, $gid=undef, $users=undef, $secrets=undef, $allow=undef, $deny=undef) {
 
-  $file = "/etc/rsyncd.conf"
+  $file = '/etc/rsyncd.conf'
 
   case $ensure {
     present: {
@@ -10,10 +10,10 @@ define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $mungesyml
           incl    => $file,
           lens    => 'Rsyncd.lns',
           changes => [
-            "set '/$name/#comment' 'created by rsyncd::export($name)'",
-            "set '/$name/path' '$path'",
-            "set '/$name/use\\ chroot' $chroot",
-            "set '/$name/read\\ only' $readonly",
+            "set '$name/#comment' 'created by rsyncd::export($name)'",
+            "set '$name/path' '$path'",
+            "set '$name/use\\ chroot' $chroot",
+            "set '$name/read\\ only' $readonly",
           ],
           require => Augeas["set rsyncd pidfile"],
         }
@@ -29,7 +29,7 @@ define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $mungesyml
                 augeas { "setup rsyncd munge symlinks $name":
                   incl    => $file,
                   lens    => 'Rsyncd.lns',
-                  changes => "set '/$name/munge\\ symlinks' $mungesymlinks",
+                  changes => "set '$name/munge\\ symlinks' $mungesymlinks",
                   require => Augeas["setup rsyncd export $name"],
                 }
               }
@@ -41,7 +41,7 @@ define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $mungesyml
           augeas { "set rsyncd uid for $name":
             incl    => $file,
             lens    => 'Rsyncd.lns',
-            changes => "set '/$name/uid' $uid",
+            changes => "set '$name/uid' $uid",
             require => Augeas["setup rsyncd export $name"],
           }
         }
@@ -50,7 +50,7 @@ define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $mungesyml
           augeas { "set rsyncd gid for $name":
             incl    => $file,
             lens    => 'Rsyncd.lns',
-            changes => "set '/$name/gid' $gid",
+            changes => "set '$name/gid' $gid",
             require => Augeas["setup rsyncd export $name"],
           }
         }
@@ -59,7 +59,7 @@ define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $mungesyml
           augeas { "set rsyncd auth users for $name":
             incl    => $file,
             lens    => 'Rsyncd.lns',
-            changes => "set '/$name/auth\\ users' '$users'",
+            changes => "set '$name/auth\\ users' '$users'",
             require => Augeas["setup rsyncd export $name"],
           }
         }
@@ -68,7 +68,7 @@ define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $mungesyml
           augeas { "set rsyncd secrets file for $name":
             incl    => $file,
             lens    => 'Rsyncd.lns',
-            changes => "set '/$name/secrets\\ file' '$secrets'",
+            changes => "set '$name/secrets\\ file' '$secrets'",
             require => Augeas["setup rsyncd export $name"],
           }
         }
@@ -77,7 +77,7 @@ define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $mungesyml
           augeas { "set rsyncd hosts allow for $name":
             incl    => $file,
             lens    => 'Rsyncd.lns',
-            changes => "set '/$name/hosts\\ allow' '$allow'",
+            changes => "set '$name/hosts\\ allow' '$allow'",
             require => Augeas["setup rsyncd export $name"],
           }
         }
@@ -86,7 +86,7 @@ define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $mungesyml
           augeas { "set rsyncd hosts deny for $name":
             incl    => $file,
             lens    => 'Rsyncd.lns',
-            changes => "set '/$name/hosts\\ deny' '$deny'",
+            changes => "set '$name/hosts\\ deny' '$deny'",
             require => Augeas["setup rsyncd export $name"],
           }
         }
@@ -101,7 +101,7 @@ define rsyncd::export ($ensure=present, $chroot=true, $readonly=true, $mungesyml
       augeas { "remove $name":
         incl    => $file,
         lens    => 'Rsyncd.lns',
-        changes => "remove '/$name'",
+        changes => "remove '$name'",
       }
     }
   }
