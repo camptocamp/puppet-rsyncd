@@ -1,14 +1,9 @@
 class rsyncd::params {
 
-  $xinetdcontext = $::osfamily ? {
-    'RedHat' => $::lsbmajdistrelease ? {
-      6 =>  $::lsbdistrelease ? {
-        /6\.0|6\.1/ => 'rsync/',
-        default   => 'service/',
-      },
-      default => 'rsync/',
-    },
-    'Debian' => '',
+  if versioncmp($::augeasversion, '0.7.3') < 0 {
+    $xinetdcontext = 'rsync/'
+  } else {
+    $xinetdcontext = 'service[.="rsync"]'
   }
 
 }
