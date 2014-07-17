@@ -10,6 +10,8 @@ define rsyncd::export (
   $secrets=undef,
   $allow=undef,
   $deny=undef,
+  $prexferexec=undef,
+  $postxferexec=undef,
 ) {
 
   $file = '/etc/rsyncd.conf'
@@ -102,6 +104,25 @@ define rsyncd::export (
             require => Augeas["setup rsyncd export ${name}"],
           }
         }
+
+        if $prexferexec {
+          augeas { "set pre-xfer exec for ${name}":
+            incl    => $file,
+            lens    => 'Rsyncd.lns',
+            changes => "set '${name}/pre-xfer\\ exec' ${prexferexec}",
+            require => Augeas["setup rsyncd export ${name}"],
+          }
+        }
+
+        if $postxferexec {
+          augeas { "set post-xfer exec for ${name}":
+            incl    => $file,
+            lens    => 'Rsyncd.lns',
+            changes => "set '${name}/post-xfer\\ exec' ${postxferexec}",
+            require => Augeas["setup rsyncd export ${name}"],
+          }
+        }
+
 
       }
       else {
