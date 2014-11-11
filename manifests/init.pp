@@ -36,21 +36,41 @@ class rsyncd {
 
     RedHat: {
 
-      $prefix = $rsyncd::params::xinetdcontext
+      case $::lsbmajdistrelease {
 
-      augeas { 'enable rsync service':
-        incl    => '/etc/xinetd.d/rsync',
-        lens    => 'Xinetd.lns',
-        changes => [
-          "set ${prefix}/disable no",
-          "set ${prefix}/socket_type stream",
-          "set ${prefix}/wait no",
-          "set ${prefix}/user root",
-          "set ${prefix}/server /usr/bin/rsync",
-          "set ${prefix}/server_args/value --daemon",
-        ],
-        notify  => Service['xinetd'],
-        require => Package['xinetd'],
+        '5', '6': {
+          $prefix = $rsyncd::params::xinetdcontext
+
+          augeas { 'enable rsync service':
+            incl    => '/etc/xinetd.d/rsync',
+            lens    => 'Xinetd.lns',
+            changes => [
+              "set ${prefix}/disable no",
+              "set ${prefix}/socket_type stream",
+              "set ${prefix}/wait no",
+              "set ${prefix}/user root",
+              "set ${prefix}/server /usr/bin/rsync",
+              "set ${prefix}/server_args/value --daemon",
+            ],
+            notify  => Service['xinetd'],
+            require => Package['xinetd'],
+          }
+        }
+
+        '7': {
+          service { 'rsyncd':
+            ensure     => running,
+            enable     => true,
+            hasstatus  => true,
+            hasrestart => true,
+            require    => Package['rsync'],
+          }
+        }
+
+        default: {
+          fail("Unsupported release ${::lsbmajdistrelease} of ${::osfamily}")
+        }
+
       }
     }
 
