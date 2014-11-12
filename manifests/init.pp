@@ -54,6 +54,10 @@ class rsyncd {
       }
     }
 
+    default: {
+      fail "Unsupported OS family ${::osfamily}"
+    }
+
   }
 
 }
