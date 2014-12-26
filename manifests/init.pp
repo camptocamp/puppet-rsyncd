@@ -17,7 +17,7 @@ class rsyncd {
 
   case $::osfamily {
 
-    Debian: {
+    'Debian': {
       augeas { 'enable rsync service':
         changes => 'set RSYNC_ENABLE true',
         lens    => 'Shellvars.lns',
@@ -34,7 +34,7 @@ class rsyncd {
       }
     }
 
-    RedHat: {
+    'RedHat': {
 
       case $::operatingsystemmajrelease {
 
