@@ -36,7 +36,7 @@ class rsyncd {
 
     RedHat: {
 
-      case $::lsbmajdistrelease {
+      case $::operatingsystemmajrelease {
 
         '5', '6': {
           $prefix = $rsyncd::params::xinetdcontext
@@ -68,7 +68,7 @@ class rsyncd {
         }
 
         default: {
-          fail("Unsupported release ${::lsbmajdistrelease} of ${::osfamily}")
+          fail("Unsupported release ${::operatingsystemmajrelease} of ${::osfamily}")
         }
 
       }
