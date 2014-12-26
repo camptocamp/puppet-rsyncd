@@ -1,0 +1,4 @@
+---
+fixtures:
+  symlinks:
+    rsyncd: "#{source_dir}"
