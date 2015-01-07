@@ -17,7 +17,7 @@ define rsyncd::export (
   $file = '/etc/rsyncd.conf'
 
   case $ensure {
-    present: {
+    'present': {
 
       if $path {
         augeas { "setup rsyncd export ${name}":
@@ -130,7 +130,7 @@ define rsyncd::export (
       }
 
     }
-    absent: {
+    'absent': {
       augeas { "remove ${name}":
         incl    => $file,
         lens    => 'Rsyncd.lns',
