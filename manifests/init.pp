@@ -2,7 +2,7 @@ class rsyncd {
 
   realize(Package['rsync'])
 
-  include rsyncd::params
+  include ::rsyncd::params
 
   file { '/etc/rsyncd.conf':
     ensure => present,
