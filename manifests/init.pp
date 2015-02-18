@@ -5,7 +5,7 @@ class rsyncd {
   include ::rsyncd::params
 
   file { '/etc/rsyncd.conf':
-    ensure => present,
+    ensure => file,
   }
 
   augeas { 'set rsyncd pidfile':
