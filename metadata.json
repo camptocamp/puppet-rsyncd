@@ -1,6 +1,6 @@
 {
   "name": "camptocamp-rsyncd",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": "Camptocamp",
   "summary": "Puppet Rsyncd module",
   "license": "Apache-2.0",
@@ -8,6 +8,7 @@
   "project_page": "https://github.com/camptocamp/puppet-rsyncd",
   "issues_url": "https://github.com/camptocamp/puppet-rsyncd/issues",
   "dependencies": [
+
   ],
   "requirements": [
     {
