@@ -1,6 +1,6 @@
 {
   "name": "camptocamp-rsyncd",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "author": "Camptocamp",
   "summary": "Puppet Rsyncd module",
   "license": "Apache-2.0",
