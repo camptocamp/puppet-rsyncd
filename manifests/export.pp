@@ -12,6 +12,7 @@ define rsyncd::export (
   $deny=undef,
   $prexferexec=undef,
   $postxferexec=undef,
+  $exclude=undef,
 ) {
 
   $file = '/etc/rsyncd.conf'
@@ -122,7 +123,15 @@ define rsyncd::export (
             require => Augeas["setup rsyncd export ${name}"],
           }
         }
-
+        
+        if $exclude {
+          augeas { "set exclude for ${name}":
+            incl    => $file,
+            lens    => 'Rsyncd.lns',
+            changes => "set \"${name}/exclude\" '${exclude}'",
+            require => Augeas["setup rsyncd export ${name}"],
+          }
+        }
 
       }
       else {
