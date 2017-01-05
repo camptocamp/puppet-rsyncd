@@ -32,20 +32,17 @@ define rsyncd::export (
           require => Augeas['set rsyncd pidfile'],
         }
 
-        case $::operatingsystem {
+        if $::osfamily == 'RedHat' {
+          case $::lsbmajdistrelease {
 
-          /RedHat|CentOS/: {
-            case $::lsbmajdistrelease {
+            '4','5','6': { }
 
-              '4','5','6': { }
-
-              default: {
-                augeas { "setup rsyncd munge symlinks ${name}":
-                  incl    => $file,
-                  lens    => 'Rsyncd.lns',
-                  changes => "set '${name}/munge\\ symlinks' ${mungesymlinks}",
-                  require => Augeas["setup rsyncd export ${name}"],
-                }
+            default: {
+              augeas { "setup rsyncd munge symlinks ${name}":
+                incl    => $file,
+                lens    => 'Rsyncd.lns',
+                changes => "set '${name}/munge\\ symlinks' ${mungesymlinks}",
+                require => Augeas["setup rsyncd export ${name}"],
               }
             }
           }
@@ -136,6 +133,9 @@ define rsyncd::export (
         lens    => 'Rsyncd.lns',
         changes => "remove '${name}'",
       }
+    }
+    default: {
+      fail "Unknown value for ensure: ${ensure}"
     }
   }
 }
