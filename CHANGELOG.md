@@ -1,3 +1,7 @@
+## 2017-06-08 - Release 1.0.14
+
+Add permissions to rsync_wwwdata selinux module
+
 ## 2015-08-21 - Release 1.0.13
 
 Use docker for acceptance tests
