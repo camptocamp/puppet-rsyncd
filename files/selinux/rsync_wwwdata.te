@@ -1,6 +1,6 @@
 # file managed by puppet
 
-module rsync_wwwdata 2.0;
+module rsync_wwwdata 2.1;
 
 require {
         type httpd_sys_content_t;
@@ -8,7 +8,7 @@ require {
         type httpd_sys_script_exec_t;
         type httpd_config_t;
         type rsync_t;
-        class file     { read write append getattr setattr create rename link unlink };
+        class file     { read write append getattr setattr create rename link unlink open };
         class lnk_file { read write append getattr setattr create rename link unlink };
         class dir      { read write append getattr setattr create rename link unlink rmdir open add_name remove_name search };
 }
