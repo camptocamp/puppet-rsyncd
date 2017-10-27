@@ -15,6 +15,7 @@ define rsyncd::export (
   $postxferexec=undef,
   $refuse=undef,
   $maxconnections=undef,
+  $lockfile=undef,
 ) {
 
   $file = '/etc/rsyncd.conf'
@@ -134,10 +135,19 @@ define rsyncd::export (
         }
 
         if $maxconnections {
-          augeas { "set max connections exec for ${name}":
+          augeas { "set max connections for ${name}":
             incl    => $file,
             lens    => 'Rsyncd.lns',
             changes => "set '${name}/max\\ connections' ${maxconnections}",
+            require => Augeas["setup rsyncd export ${name}"],
+          }
+        }
+
+        if $lockfile {
+          augeas { "set lock file for ${name}":
+            incl    => $file,
+            lens    => 'Rsyncd.lns',
+            changes => "set '${name}/lock\\ file' ${lockfile}",
             require => Augeas["setup rsyncd export ${name}"],
           }
         }
