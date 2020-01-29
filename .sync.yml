@@ -1,3 +1,28 @@
 ---
 .travis.yml:
-  forge_password: "TZMGjqG6CXRhqQyttx6ygBbY78IN02WBnM/va3OjWd1iS9/KsQ5nch1l+Z7vr4YF6fPYWcBSG2gZ4w74vNvIfBoeNI9C249h3O8Q6+wJ9OH5D2c9jJGXDHjVOUjfLBSS6O12uCKYnzjV91tslpNXh8+VVQJfcEclnPXtuLL4Qwg="
+  addons:
+    apt:
+      sources:
+        - augeas
+      packages:
+        - libaugeas-dev
+  user: camptocamp
+  secure: "TZMGjqG6CXRhqQyttx6ygBbY78IN02WBnM/va3OjWd1iS9/KsQ5nch1l+Z7vr4YF6fPYWcBSG2gZ4w74vNvIfBoeNI9C249h3O8Q6+wJ9OH5D2c9jJGXDHjVOUjfLBSS6O12uCKYnzjV91tslpNXh8+VVQJfcEclnPXtuLL4Qwg="
+  branches:
+    - master
+    - /^\d/
+  deploy_to_forge:
+    enabled: true
+    tag_regex: "^\\d"
+
+Gemfile:
+  required:
+    ':development':
+      - gem: ruby-augeas
+  optional:
+    ':development':
+      - gem: 'github_changelog_generator'
+
+Rakefile:
+  changelog_version_tag_pattern: '%s'
+
