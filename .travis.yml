@@ -2,6 +2,12 @@
 dist: xenial
 language: ruby
 cache: bundler
+addons:
+  apt:
+    sources:
+      - augeas
+    packages:
+      - libaugeas-dev
 before_install:
   - bundle -v
   - rm -f Gemfile.lock
@@ -18,7 +24,7 @@ stages:
   - spec
   - acceptance
   -
-    if: tag =~ ^v\d
+    if: tag =~ ^\d
     name: deploy
 matrix:
   fast_finish: true
@@ -41,5 +47,15 @@ branches:
   only:
     - master
     - /^v\d/
+    - /^\d/
 notifications:
   email: false
+deploy:
+  provider: puppetforge
+  user: camptocamp
+  password:
+    secure: "TZMGjqG6CXRhqQyttx6ygBbY78IN02WBnM/va3OjWd1iS9/KsQ5nch1l+Z7vr4YF6fPYWcBSG2gZ4w74vNvIfBoeNI9C249h3O8Q6+wJ9OH5D2c9jJGXDHjVOUjfLBSS6O12uCKYnzjV91tslpNXh8+VVQJfcEclnPXtuLL4Qwg="
+  on:
+    tags: true
+    all_branches: true
+    condition: "$DEPLOY_TO_FORGE = yes"
