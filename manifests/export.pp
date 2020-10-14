@@ -12,6 +12,7 @@ define rsyncd::export (
   $deny=undef,
   $prexferexec=undef,
   $postxferexec=undef,
+  $incomingchmod=undef,
 ) {
 
   $file = '/etc/rsyncd.conf'
@@ -33,7 +34,7 @@ define rsyncd::export (
         }
 
         if $::osfamily == 'RedHat' {
-          case $::lsbmajdistrelease {
+          case $::operatingsystemmajrelease {
 
             '4','5','6': { }
 
@@ -120,6 +121,14 @@ define rsyncd::export (
           }
         }
 
+        if $incomingchmod {
+          augeas { "set incoming chmod for ${name}":
+            incl    => $file,
+            lens    => 'Rsyncd.lns',
+            changes => "set '${name}/incoming\\ chmod' ${incomingchmod}",
+            require => Augeas["setup rsyncd export ${name}"],
+          }
+        }
 
       }
       else {
