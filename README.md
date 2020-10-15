@@ -51,8 +51,9 @@ rsyncd::export { "backup":
   secrets => "/home/dba/rsyncd.secret",
   allow => "192.168.0.0/24",
   require => [File["/backup-mysql"], File["/home/dba/rsyncd.secret"]],
-  prexferexec => "/home/dba/bin/pre-exec.sh"
-  postxferexec => "/home/dba/bin/post-exec.sh"
-  incomingchmod => "go=-w,+X"
+  prexferexec => "/home/dba/bin/pre-exec.sh",
+  postxferexec => "/home/dba/bin/post-exec.sh",
+  incomingchmod => "go=-w,+X",
+  logfile => '/var/log/rsyncd.test.log',
 }
 ```

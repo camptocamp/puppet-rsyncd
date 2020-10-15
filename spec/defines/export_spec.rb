@@ -27,13 +27,14 @@ describe 'rsyncd::export' do
       context 'with values set for every parameter' do
         let(:params) do
           {
-            'ensure'   => 'present',
-            'chroot'   => false,
-            'readonly' => false,
-            'path'     => '/some/path',
-            'uid'      => 'user1',
-            'gid'      => 'group1',
+            'ensure'        => 'present',
+            'chroot'        => false,
+            'readonly'      => false,
+            'path'          => '/some/path',
+            'uid'           => 'user1',
+            'gid'           => 'group1',
             'incomingchmod' => 'go-w,+X',
+            'logfile'       => '/var/log/rsyncd.test.log',
           }
         end
 
@@ -51,6 +52,7 @@ describe 'rsyncd::export' do
         it { is_expected.to contain_augeas("set rsyncd uid for #{title}").with_changes("set '#{title}/uid' user1") }
         it { is_expected.to contain_augeas("set rsyncd gid for #{title}").with_changes("set '#{title}/gid' group1") }
         it { is_expected.to contain_augeas("set incoming chmod for #{title}").with_changes("set '#{title}/incoming\\ chmod' go-w,+X") }
+        it { is_expected.to contain_augeas("set log file for #{title}").with_changes("set '#{title}/log\\ file' '/var/log/rsyncd.test.log'") }
       end
 
       context 'with ensure absent' do

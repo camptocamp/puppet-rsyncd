@@ -13,6 +13,7 @@ define rsyncd::export (
   $prexferexec=undef,
   $postxferexec=undef,
   $incomingchmod=undef,
+  $logfile=undef,
 ) {
 
   $file = '/etc/rsyncd.conf'
@@ -126,6 +127,15 @@ define rsyncd::export (
             incl    => $file,
             lens    => 'Rsyncd.lns',
             changes => "set '${name}/incoming\\ chmod' ${incomingchmod}",
+            require => Augeas["setup rsyncd export ${name}"],
+          }
+        }
+
+        if $logfile {
+          augeas { "set log file for ${name}":
+            incl    => $file,
+            lens    => 'Rsyncd.lns',
+            changes => "set '${name}/log\\ file' '${logfile}'",
             require => Augeas["setup rsyncd export ${name}"],
           }
         }
