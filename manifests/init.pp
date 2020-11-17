@@ -57,7 +57,7 @@ class rsyncd {
           }
         }
 
-        '7': {
+        '7','8': {
           service { 'rsyncd':
             ensure     => running,
             enable     => true,
