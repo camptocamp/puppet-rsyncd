@@ -67,6 +67,20 @@ class rsyncd {
           }
         }
 
+        '8': {
+          package { 'rsync-daemon':
+            ensure => installed,
+          }
+
+          service { 'rsyncd':
+            ensure     => running,
+            enable     => true,
+            hasstatus  => true,
+            hasrestart => true,
+            require    => Package['rsync-daemon'],
+          }
+        }
+
         default: {
           fail("Unsupported release ${::operatingsystemmajrelease} of ${::osfamily}")
         }

@@ -16,6 +16,8 @@ define rsyncd::export (
   $refuse=undef,
   $maxconnections=undef,
   $lockfile=undef,
+  $incomingchmod=undef,
+  $logfile=undef,
 ) {
 
   $file = '/etc/rsyncd.conf'
@@ -38,7 +40,7 @@ define rsyncd::export (
         }
 
         if $::osfamily == 'RedHat' {
-          case $::lsbmajdistrelease {
+          case $::operatingsystemmajrelease {
 
             '4','5','6': { }
 
@@ -140,6 +142,14 @@ define rsyncd::export (
             lens    => 'Rsyncd.lns',
             changes => "set '${name}/max\\ connections' ${maxconnections}",
             require => Augeas["setup rsyncd export ${name}"],
+         }
+         
+         if $incomingchmod {
+          augeas { "set incoming chmod for ${name}":
+            incl    => $file,
+            lens    => 'Rsyncd.lns',
+            changes => "set '${name}/incoming\\ chmod' ${incomingchmod}",
+            require => Augeas["setup rsyncd export ${name}"],
           }
         }
 
@@ -148,6 +158,14 @@ define rsyncd::export (
             incl    => $file,
             lens    => 'Rsyncd.lns',
             changes => "set '${name}/lock\\ file' ${lockfile}",
+            require => Augeas["setup rsyncd export ${name}"],
+        }
+
+        if $logfile {
+          augeas { "set log file for ${name}":
+            incl    => $file,
+            lens    => 'Rsyncd.lns',
+            changes => "set '${name}/log\\ file' '${logfile}'",
             require => Augeas["setup rsyncd export ${name}"],
           }
         }

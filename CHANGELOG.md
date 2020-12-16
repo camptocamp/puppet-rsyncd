@@ -1,3 +1,11 @@
+## 2020-10-17 - Release 1.2.0
+
+Support of RHEL 8
+
+## 2020-01-29 - Release 1.1.0
+
+Convert to PDK
+
 ## 2017-06-14 - Release 1.0.15
 
 Fix selinux module rsync_wwwdata
