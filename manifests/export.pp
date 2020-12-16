@@ -2,6 +2,7 @@ define rsyncd::export (
   $ensure=present,
   $chroot=true,
   $readonly=true,
+  $writeonly=false,
   $mungesymlinks=true,
   $path=undef,
   $uid=undef,
@@ -12,6 +13,9 @@ define rsyncd::export (
   $deny=undef,
   $prexferexec=undef,
   $postxferexec=undef,
+  $refuse=undef,
+  $maxconnections=undef,
+  $lockfile=undef,
   $incomingchmod=undef,
   $logfile=undef,
 ) {
@@ -30,6 +34,7 @@ define rsyncd::export (
             "set '${name}/path' '${path}'",
             "set '${name}/use\\ chroot' ${chroot}",
             "set '${name}/read\\ only' ${readonly}",
+            "set '${name}/write\\ only' ${writeonly}",
           ],
           require => Augeas['set rsyncd pidfile'],
         }
@@ -104,6 +109,15 @@ define rsyncd::export (
           }
         }
 
+        if $refuse {
+          augeas { "set rsyncd refuse options for ${name}":
+            incl    => $file,
+            lens    => 'Rsyncd.lns',
+            changes => "set '${name}/refuse\\ options' '${refuse}'",
+            require => Augeas["setup rsyncd export ${name}"],
+          }
+        }
+
         if $prexferexec {
           augeas { "set pre-xfer exec for ${name}":
             incl    => $file,
@@ -122,13 +136,29 @@ define rsyncd::export (
           }
         }
 
-        if $incomingchmod {
+        if $maxconnections {
+          augeas { "set max connections for ${name}":
+            incl    => $file,
+            lens    => 'Rsyncd.lns',
+            changes => "set '${name}/max\\ connections' ${maxconnections}",
+            require => Augeas["setup rsyncd export ${name}"],
+         }
+         
+         if $incomingchmod {
           augeas { "set incoming chmod for ${name}":
             incl    => $file,
             lens    => 'Rsyncd.lns',
             changes => "set '${name}/incoming\\ chmod' ${incomingchmod}",
             require => Augeas["setup rsyncd export ${name}"],
           }
+        }
+
+        if $lockfile {
+          augeas { "set lock file for ${name}":
+            incl    => $file,
+            lens    => 'Rsyncd.lns',
+            changes => "set '${name}/lock\\ file' ${lockfile}",
+            require => Augeas["setup rsyncd export ${name}"],
         }
 
         if $logfile {
